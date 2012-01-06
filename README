@@ -1,0 +1,53 @@
+NAME
+    Opsview::REST - Interface to the Opsview REST API
+
+VERSION
+    Version 0.01
+
+SYNOPSIS
+        use Opsview::REST;
+
+        my $ops = Opsview::REST->new(
+            base_url => 'http://opsview.example.com/rest',
+            user     => 'username',
+            pass     => 'password',
+        );
+
+        my $resp = $ops->get('/event');
+
+DESCRIPTION
+    Opsview::REST is a set of modules to access the Opsview REST API, which
+    is the recommended method for scripting configuration changes or any
+    other form of integration.
+
+METHODS
+  new
+    Return an instance of the Opsview::REST.
+
+   Required Arguments
+    base_url
+        Base url where the REST API resides. By default it is under "/rest".
+
+    user
+    pass
+        Username and password needed to login.
+
+  get
+    Makes a "GET" request to the API. The response is properly deserialized
+    and returned as a Perl data structure.
+
+SEE ALSO
+    *   <http://www.opsview.org/>
+
+    *   Opsview REST API Documentation
+        <http://docs.opsview.com/doku.php?id=opsview-community:restapi>
+
+AUTHOR
+    *   Miquel Ruiz <mruiz@cpan.org>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2012 by Miquel Ruiz.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
