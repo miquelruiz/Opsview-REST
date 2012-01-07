@@ -26,6 +26,15 @@ sub BUILD {
 
 }
 
+sub status {
+    my $self = shift;
+
+    require Opsview::REST::Status;
+    my $uri = Opsview::REST::Status->new(@_);
+
+    return $self->get($uri->as_string);
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
