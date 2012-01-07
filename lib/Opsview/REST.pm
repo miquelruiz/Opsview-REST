@@ -3,11 +3,9 @@ package Opsview::REST;
 use Moose;
 use namespace::autoclean;
 
-use Carp;
 use Opsview::REST::Exception;
 
-use JSON::XS ();
-use HTTP::Tiny;
+with 'Opsview::REST::APICaller';
 
 has ['user', 'pass', 'base_url'] => (
     is       => 'ro',
@@ -15,29 +13,9 @@ has ['user', 'pass', 'base_url'] => (
     required => 1,
 );
 
-
-# Private stuff
-has [ qw/ua headers/ ] => (
-    is => 'rw',
-);
-
-has 'json' => (
-    is      => 'ro',
-    default => sub { JSON::XS->new },
-);
-
 sub BUILD {
     my ($self) = @_;
     
-    $self->ua(HTTP::Tiny->new(
-        agent => 'Opsview::REST/' . (Opsview::REST->VERSION || '0.001_DEV'),
-    ));
-
-    $self->headers({
-        'Accept'        => 'application/json',
-        'Content-type'  => 'application/json',
-    });
-
     my $r = $self->post('/login', {
         username => $self->user,
         password => $self->pass,
@@ -46,42 +24,6 @@ sub BUILD {
     $self->headers->{'X-Opsview-Username'} = $self->user;
     $self->headers->{'X-Opsview-Token'}    = $r->{token};
 
-}
-
-sub get {
-    my $self = shift;
-    my $r = $self->ua->get($self->base_url . shift, {
-        headers => $self->headers,
-    });
-    croak $self->_errmsg($r) unless $r->{success};
-
-    return $self->json->decode($r->{content});
-}
-
-sub post {
-    my ($self, $method, $data) = @_;
-    my $r = $self->ua->post(
-        $self->base_url . $method,
-        {
-            headers => $self->headers,
-            content => $self->json->encode($data),
-        }
-    );
-    croak $self->_errmsg($r) unless $r->{success};
-
-    return $self->json->decode($r->{content});
-}
-
-sub _errmsg {
-    my ($self, $r) = @_;
-    my $cont; $cont = $self->json->decode($r->{content})
-        if $r->{content};
-
-    return Opsview::REST::Exception->new(
-        status  => $r->{status},
-        reason  => $r->{reason},
-        message => $cont ? $cont->{message} : undef,
-    );
 }
 
 __PACKAGE__->meta->make_immutable;
