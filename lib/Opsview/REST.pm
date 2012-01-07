@@ -3,8 +3,9 @@ package Opsview::REST;
 use Moose;
 use namespace::autoclean;
 
-use URI;
 use Carp;
+use Opsview::REST::Exception;
+
 use JSON::XS ();
 use HTTP::Tiny;
 
@@ -29,7 +30,7 @@ sub BUILD {
     my ($self) = @_;
     
     $self->ua(HTTP::Tiny->new(
-        agent => 'Opsview::REST/' . Opsview::REST->VERSION,
+        agent => 'Opsview::REST/' . (Opsview::REST->VERSION || '0.001_DEV'),
     ));
 
     $self->headers({
@@ -73,10 +74,14 @@ sub post {
 
 sub _errmsg {
     my ($self, $r) = @_;
-    my $msg = "$r->{status} $r->{reason}";
-    if ($r->{content}) {
-        $msg .= ': ' . $self->json->decode($r->{content})->{message};
-    };
+    my $cont; $cont = $self->json->decode($r->{content})
+        if $r->{content};
+
+    return Opsview::REST::Exception->new(
+        status  => $r->{status},
+        reason  => $r->{reason},
+        message => $cont ? $cont->{message} : undef,
+    );
 }
 
 __PACKAGE__->meta->make_immutable;
