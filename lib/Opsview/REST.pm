@@ -60,7 +60,14 @@ Version 0.01
         pass     => 'password',
     );
 
-    my $resp = $ops->get('/event');
+    # These are equivalent
+    my $status = $ops->get('/status/hostgroup?hostgroupid=1&...');
+    my $status = $ops->status(
+        'hostgroup',
+        'hostgroupid' => [1, 2],
+        'filter'      => 'unhandled',
+        ...
+    );
 
 =head1 DESCRIPTION
 
@@ -90,10 +97,16 @@ Username and password needed to login.
 
 =back
 
-=head2 get
+=head2 get($url)
 
 Makes a "GET" request to the API. The response is properly deserialized and
 returned as a Perl data structure.
+
+=head2 status( $endpoint, [ %args ] )
+
+Convenience method to request the "status" part of the API. C<$endpoint> is
+the endpoint to send the query to. C<%args> is a hash which will get properly
+translated to URL arguments.
 
 =head1 SEE ALSO
 
