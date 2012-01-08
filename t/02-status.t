@@ -36,13 +36,5 @@ my @tests = (
     },
 );
 
-for (@tests) {
-    if ($_->{die}) {
-        dies_ok { Opsview::REST::Status->new(@{ $_->{args} }); } $_->{die};
-    } else {
-        my $status = eval { Opsview::REST::Status->new(@{ $_->{args} }); };
-        is($status->as_string, $_->{url}, $_->{url});
-    }
-};
-
+test_urls('Opsview::REST::Status', @tests);
 
