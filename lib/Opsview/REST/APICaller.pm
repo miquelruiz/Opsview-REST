@@ -64,3 +64,42 @@ sub _errmsg {
 }
 
 1;
+__END__
+
+=pod
+
+=head1 NAME
+
+Opsview::REST::APICaller - Role to call the Opsview API
+
+=head1 SYNOPSIS
+
+    use Moose;
+    with 'Opsview::REST::APICaller';
+
+    $self->get($url);
+    $self->post($url, $data);
+
+=head1 DESCRIPTION
+
+This role implements the actual HTTP calls. It uses L<HTTP::Tiny> to do so.
+Only C<get> and C<post> implemented at the moment.
+
+=head1 AUTHOR
+
+=over 4
+
+=item *
+
+Miquel Ruiz <mruiz@cpan.org>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Miquel Ruiz.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
