@@ -2,6 +2,10 @@
 use strict;
 use warnings;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use Opsview::REST::TestUtils;
+
 use Test::More tests => 12;
 use Test::Exception;
 
@@ -25,11 +29,7 @@ SKIP: {
     is($@->reason, 'Unauthorized', '"Unauthorized" reason in exception');
     ok(defined $@->message, 'Message defined in exception');
 
-    my $ops = Opsview::REST->new(
-        base_url => $ENV{OPSVIEW_REST_URL}  || $url,
-        user     => $ENV{OPSVIEW_REST_USER} || $user,
-        pass     => $ENV{OPSVIEW_REST_PASS} || $pass,
-    );
+    my $ops = get_opsview();
 
     isa_ok($ops, 'Opsview::REST', "Object created");
     ok(defined $ops->headers->{'X-Opsview-Token'}, "Logged in");
