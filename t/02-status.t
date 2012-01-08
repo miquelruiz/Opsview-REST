@@ -2,27 +2,37 @@
 use strict;
 use warnings;
 
-use Opsview::REST;
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use Opsview::REST::TestUtils;
 
-use Test::More;
+use Test::More tests => 5;
 use Data::Dumper;
 
-my ($url, $user, $pass) = (qw( http://localhost/rest admin initial ));
-my $ops = Opsview::REST->new(
-    base_url => $url,
-    user     => $user,
-    pass     => $pass,
+BEGIN { use_ok 'Opsview::REST::Status'; };
+
+my @tests = (
+    {
+        args => ['hostgroup', hostgroupid => 1],
+        url  => '/status/hostgroup?hostgroupid=1',
+    },
+    {
+        args => ['hostgroup', hostgroupid => [1, 2]],
+        url  => '/status/hostgroup?hostgroupid=1&hostgroupid=2',
+    },
+    {
+        args => ['host', host => 'opsview', state => [0, 1, 2]],
+        url  => '/status/host?state=0&state=1&state=2&host=opsview',
+    },
+    {
+        args => ['host', filter => 'handled', state_type => 'hard', host_state => [1, 2]],
+        url  => '/status/host?host_state=1&host_state=2&filter=handled&state_type=hard',
+    },
 );
 
-my $status = $ops->status('hostgroup', hostgroupid => 1);
-my $list   = $status->{list};
-my %hgids  = map { $_->{hostgroupid} => 1 } @$list;
-is_deeply(\%hgids, { 1 => 1 }, 'Got status for hostgroup 1');
+for (@tests) {
+    my $status = Opsview::REST::Status->new(@{ $_->{args} });
+    is($status->as_string, $_->{url}, $_->{url});
+};
 
-$status  = $ops->status('hostgroup', hostgroupid => [1,2]);
-my $list = $status->{list};
-%hgids   = map { $_->{hostgroupid} => 1 } @$list;
-is_deeply(\%hgids, {1 => 1, 2 => 1}, 'Got status for hostgroups 1 and 2');
-
-done_testing();
 
