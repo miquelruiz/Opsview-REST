@@ -6,12 +6,18 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Opsview::REST::TestUtils;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Exception;
+
 use Data::Dumper;
 
 BEGIN { use_ok 'Opsview::REST::Status'; };
 
 my @tests = (
+    {
+        args => [],
+        die  => 'No arguments die',
+    },
     {
         args => ['hostgroup', hostgroupid => 1],
         url  => '/status/hostgroup?hostgroupid=1',
@@ -31,8 +37,12 @@ my @tests = (
 );
 
 for (@tests) {
-    my $status = Opsview::REST::Status->new(@{ $_->{args} });
-    is($status->as_string, $_->{url}, $_->{url});
+    if ($_->{die}) {
+        dies_ok { Opsview::REST::Status->new(@{ $_->{args} }); } $_->{die};
+    } else {
+        my $status = eval { Opsview::REST::Status->new(@{ $_->{args} }); };
+        is($status->as_string, $_->{url}, $_->{url});
+    }
 };
 
 

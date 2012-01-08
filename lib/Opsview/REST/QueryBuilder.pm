@@ -13,7 +13,6 @@ has uri => (
 
 has path => (
     is  => 'ro',
-    isa => 'Str',
 );
 
 has args => (
@@ -23,16 +22,21 @@ has args => (
 
 sub BUILDARGS {
     my ($class, $path, @args) = @_;
-    return {
-        path => $path,
-        args => { @args },
-    };
+
+    if (@_ == 1) {
+        return {};
+    } else {
+        return {
+            path => $path,
+            args => { @args },
+        };
+    }
 }
 
 sub BUILD {
     my $self = shift;
 
-    $self->uri->path($self->base . $self->path);
+    $self->uri->path($self->base . ($self->path || ''));
     $self->uri->query_form($self->args);
 }
 
