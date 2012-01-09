@@ -26,6 +26,7 @@ sub BUILD {
 
 }
 
+# Status
 sub status {
     my $self = shift;
 
@@ -33,6 +34,31 @@ sub status {
     my $uri = Opsview::REST::Status->new(@_);
 
     return $self->get($uri->as_string);
+}
+
+# Downtime
+sub _downtime {
+    my $self = shift;
+
+    require Opsview::REST::Downtime;
+    my $uri = Opsview::REST::Downtime->new(@_);
+
+    return $uri->as_string;
+}
+
+sub downtimes {
+    my $self = shift;
+    return $self->get($self->_downtime(@_));
+}
+
+sub create_downtime {
+    my $self = shift;
+    return $self->post($self->_downtime(@_));
+}
+
+sub delete_downtime {
+    my $self = shift;
+    return $self->delete($self->_downtime(@_));
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -73,7 +99,7 @@ Version 0.01
 
 Opsview::REST is a set of modules to access the Opsview REST API, which is the
 recommended method for scripting configuration changes or any other form of
-integration.
+integration since version 3.9.0
 
 =head1 METHODS
 
@@ -107,6 +133,18 @@ returned as a Perl data structure.
 Convenience method to request the "status" part of the API. C<$endpoint> is
 the endpoint to send the query to. C<%args> is a hash which will get properly
 translated to URL arguments.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:status>
+
+=head2 downtimes
+
+=head2 create_downtime( %args )
+
+=head2 delete_downtime( [ %args ] )
+
+Downtime related methods.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes>
 
 =head1 SEE ALSO
 

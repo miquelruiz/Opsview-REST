@@ -37,15 +37,23 @@ sub get {
     return $self->json->decode($r->{content});
 }
 
+sub delete {
+    my $self = shift;
+    my $r = $self->ua->delete($self->base_url . shift, {
+        headers => $self->headers,
+    });
+    croak $self->_errmsg($r) unless $r->{success};
+
+    return $self->json->decode($r->{content});
+}
+
 sub post {
     my ($self, $method, $data) = @_;
-    my $r = $self->ua->post(
-        $self->base_url . $method,
-        {
-            headers => $self->headers,
-            content => $self->json->encode($data),
-        }
-    );
+
+    my $stuff = { headers => $self->headers };
+    $stuff->{content} = $self->json->encode($data) if defined $data;
+
+    my $r = $self->ua->post($self->base_url . $method, $stuff);
     croak $self->_errmsg($r) unless $r->{success};
 
     return $self->json->decode($r->{content});
@@ -60,6 +68,7 @@ sub _errmsg {
         status  => $r->{status},
         reason  => $r->{reason},
         message => $cont ? $cont->{message} : undef,
+        detail  => $cont ? $cont->{detail}  : undef,
     );
 }
 
@@ -79,6 +88,7 @@ Opsview::REST::APICaller - Role to call the Opsview API
 
     $self->get($url);
     $self->post($url, $data);
+    $self->delete($url);
 
 =head1 DESCRIPTION
 
