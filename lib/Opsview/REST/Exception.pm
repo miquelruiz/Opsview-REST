@@ -8,7 +8,9 @@ use Moose;
 
 use overload
     '""' => sub {
-        join ': ', join (' ', $_[0]->status, $_[0]->reason), $_[0]->message;
+        join ': ',
+            join (' ', $_[0]->status, $_[0]->reason),
+            $_[0]->message, $_[0]->detail;
     },
     fallback => 1;
 
@@ -19,7 +21,7 @@ has [qw/status reason/] => (
     required => 1,
 );
 
-has 'message' => (
+has [qw/message detail/] => (
     is       => 'ro',
     required => 0,
 );
