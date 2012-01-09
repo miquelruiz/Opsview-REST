@@ -13,12 +13,19 @@ SYNOPSIS
             pass     => 'password',
         );
 
-        my $resp = $ops->get('/event');
+        # These are equivalent
+        my $status = $ops->get('/status/hostgroup?hostgroupid=1&...');
+        my $status = $ops->status(
+            'hostgroup',
+            'hostgroupid' => [1, 2],
+            'filter'      => 'unhandled',
+            ...
+        );
 
 DESCRIPTION
     Opsview::REST is a set of modules to access the Opsview REST API, which
     is the recommended method for scripting configuration changes or any
-    other form of integration.
+    other form of integration since version 3.9.0
 
 METHODS
   new
@@ -32,9 +39,26 @@ METHODS
     pass
         Username and password needed to login.
 
-  get
+  get($url)
     Makes a "GET" request to the API. The response is properly deserialized
     and returned as a Perl data structure.
+
+  status( $endpoint, [ %args ] )
+    Convenience method to request the "status" part of the API. $endpoint is
+    the endpoint to send the query to. %args is a hash which will get
+    properly translated to URL arguments.
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:status>
+
+  downtimes
+  create_downtime( %args )
+  delete_downtime( [ %args ] )
+    Downtime related methods.
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes
+    >
 
 SEE ALSO
     *   <http://www.opsview.org/>
