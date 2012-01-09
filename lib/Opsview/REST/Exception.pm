@@ -1,7 +1,17 @@
 package Opsview::REST::Exception;
 
 use Moose;
-use namespace::autoclean;
+
+# Can't use autoclean since it breaks overload:
+# https://github.com/rafl/namespace-autoclean/pull/1
+#use namespace::autoclean;
+
+use overload
+    '""' => sub {
+        join ': ', join (' ', $_[0]->status, $_[0]->reason), $_[0]->message;
+    },
+    fallback => 1;
+
 
 has [qw/status reason/] => (
     is       => 'ro',
