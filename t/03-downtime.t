@@ -32,7 +32,7 @@ my @tests = (
 test_urls('Opsview::REST::Downtime', @tests);
 
 SKIP: {
-    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 2
+    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 6
         if (not defined $ENV{OPSVIEW_REST_TEST});
 
     require DateTime;
