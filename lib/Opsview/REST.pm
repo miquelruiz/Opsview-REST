@@ -72,10 +72,6 @@ __END__
     
 Opsview::REST - Interface to the Opsview REST API
 
-=head1 VERSION
-
-Version 0.01
-
 =head1 SYNOPSIS
 
     use Opsview::REST;

@@ -1,9 +1,6 @@
 NAME
     Opsview::REST - Interface to the Opsview REST API
 
-VERSION
-    Version 0.01
-
 SYNOPSIS
         use Opsview::REST;
 
