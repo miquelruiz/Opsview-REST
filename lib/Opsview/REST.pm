@@ -159,6 +159,8 @@ Username to login as.
 
 =head3 Other Arguments
 
+=over 4
+
 =item pass
 
 =item auth_tkt
