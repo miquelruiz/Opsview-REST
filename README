@@ -33,8 +33,13 @@ METHODS
         Base url where the REST API resides. By default it is under "/rest".
 
     user
+        Username to login as.
+
+   Other Arguments
     pass
-        Username and password needed to login.
+    auth_tkt
+        Either the pass or the auth_tkt MUST be passed. It will die horribly
+        if none of these are found.
 
   get($url)
     Makes a "GET" request to the API. The response is properly deserialized
@@ -56,6 +61,35 @@ METHODS
     More info:
     <http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes
     >
+
+  events( [ %args ] )
+    Get events. An event is considered to be either:
+
+    *   a host or service changing state
+
+    *   a host or service result during soft failures
+
+    *   a host or service in a failure state where 'alert every failure' is
+        enabled
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:event>
+
+  reload
+    Initiates a synchronous reload. Be careful: if your opsview reload takes
+    more than 60 seconds to run, this call will time out. The returned data
+    contains the info of the reload.
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiatin
+    g_an_opsview_reload>
+
+  reload_info
+    Get status of reload.
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiatin
+    g_an_opsview_reload>
 
 SEE ALSO
     *   <http://www.opsview.org/>
