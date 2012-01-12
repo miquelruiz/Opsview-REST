@@ -6,7 +6,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Opsview::REST::TestUtils;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Exception;
 
 BEGIN { use_ok 'Opsview::REST'; };
@@ -16,7 +16,7 @@ dies_ok { Opsview::REST->new() } "Die if no arguments passed";
 my ($url, $user, $pass) = (qw( http://localhost/rest admin initial ));
 
 SKIP: {
-    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 10
+    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 11
         if (not defined $ENV{OPSVIEW_REST_TEST});
 
     throws_ok { Opsview::REST->new(
@@ -41,5 +41,11 @@ SKIP: {
     is($@->status, 404, '404 status in exception');
     is($@->reason, 'Not Found', '"Not Found" reason in exception');
     ok(defined $@->message, 'Message defined in exception');
+
+    # New instance to test login via auth_tkt
+    $ops = get_opsview_authtkt();
+
+    ok(defined $ops->headers->{'X-Opsview-Token'}, "Logged in");
+
 };
 

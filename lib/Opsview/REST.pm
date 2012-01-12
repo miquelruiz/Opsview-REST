@@ -3,23 +3,39 @@ package Opsview::REST;
 use Moose;
 use namespace::autoclean;
 
+use Carp;
 use Opsview::REST::Exception;
 
 with 'Opsview::REST::APICaller';
 
-has ['user', 'pass', 'base_url'] => (
+has [qw/ user base_url /] => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
+has [qw/ pass auth_tkt /] => (
+    is  => 'ro',
+    isa => 'Str',
+);
+
 sub BUILD {
     my ($self) = @_;
     
-    my $r = $self->post('/login', {
-        username => $self->user,
-        password => $self->pass,
-    });
+    my $r;
+    if (defined $self->pass) {
+        $r = $self->post('/login', {
+            username => $self->user,
+            password => $self->pass,
+        });
+
+    } elsif (defined $self->auth_tkt) {
+        $self->headers->{'Cookie'} = 'auth_tkt=' . $self->auth_tkt . ';';
+        $r = $self->post('/login_tkt', { username => $self->user });
+
+    } else {
+        croak "Need either a pass or an auth_tkt";
+    }
 
     $self->headers->{'X-Opsview-Username'} = $self->user;
     $self->headers->{'X-Opsview-Token'}    = $r->{token};
