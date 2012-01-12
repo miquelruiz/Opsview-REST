@@ -9,8 +9,6 @@ use Opsview::REST::TestUtils;
 use Test::More;
 use Test::Exception;
 
-BEGIN { use_ok 'Opsview::REST::Event'; };
-
 my @tests = (
     {
         args => [ ],
@@ -34,6 +32,8 @@ my @tests = (
 );
 
 plan tests => scalar @tests + 2;
+
+require_ok 'Opsview::REST::Event';
 
 test_urls('Opsview::REST::Event', @tests);
 
