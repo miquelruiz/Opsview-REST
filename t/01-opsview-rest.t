@@ -6,7 +6,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Opsview::REST::TestUtils;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Test::Exception;
 
 BEGIN { use_ok 'Opsview::REST'; };
@@ -16,8 +16,13 @@ dies_ok { Opsview::REST->new() } "Die if no arguments passed";
 my ($url, $user, $pass) = (qw( http://localhost/rest admin initial ));
 
 SKIP: {
-    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 11
+    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 12
         if (not defined $ENV{OPSVIEW_REST_TEST});
+
+    throws_ok { Opsview::REST->new(
+        base_url => $ENV{OPSVIEW_REST_URL}  || $url,
+        user     => 'user',
+    ); } qr/Need either a pass or an auth_tkt/, 'Not pass nor ticket given';
 
     throws_ok { Opsview::REST->new(
         base_url => $ENV{OPSVIEW_REST_URL}  || $url,

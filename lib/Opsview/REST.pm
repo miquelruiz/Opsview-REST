@@ -33,6 +33,9 @@ sub BUILD {
         $self->headers->{'Cookie'} = 'auth_tkt=' . $self->auth_tkt . ';';
         $r = $self->post('/login_tkt', { username => $self->user });
 
+        # Clean the cookie as this is not required anymore
+        delete $self->headers->{'Cookie'};
+
     } else {
         croak "Need either a pass or an auth_tkt";
     }
@@ -129,9 +132,18 @@ Base url where the REST API resides. By default it is under C</rest>.
 
 =item user
 
+Username to login as.
+
+=back
+
+=head3 Other Arguments
+
 =item pass
 
-Username and password needed to login.
+=item auth_tkt
+
+Either the pass or the auth_tkt MUST be passed. It will die horribly if none
+of these are found.
 
 =back
 
