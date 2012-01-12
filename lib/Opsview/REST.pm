@@ -80,6 +80,17 @@ sub delete_downtime {
     return $self->delete($self->_downtime(@_));
 }
 
+# Reload
+sub reload {
+    my $self = shift;
+    return $self->post('/reload');
+}
+
+sub reload_info {
+    my $self = shift;
+    return $self->get('/reload');
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -169,6 +180,20 @@ More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:statu
 Downtime related methods.
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes>
+
+=head2 reload
+
+Initiates a synchronous reload. Be careful: if your opsview reload takes more
+than 60 seconds to run, this call will time out. The returned data contains
+the info of the reload.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiating_an_opsview_reload>
+
+=head2 reload_info
+
+Get status of reload.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiating_an_opsview_reload>
 
 =head1 SEE ALSO
 
