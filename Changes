@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.002     2012-01-12 20:22:49 Europe/Madrid
     - Support for events
     - Support for reloads
     - Support for login via AuthTkt
