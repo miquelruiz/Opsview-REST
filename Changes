@@ -1,5 +1,7 @@
 {{$NEXT}}
-    - Support for reloads and login via AuthTkt
+    - Support for events
+    - Support for reloads
+    - Support for login via AuthTkt
 
 0.001     2012-01-11 00:14:38 Europe/Madrid
     - Initial release

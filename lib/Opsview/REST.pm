@@ -55,6 +55,16 @@ sub status {
     return $self->get($uri->as_string);
 }
 
+# Event
+sub events {
+    my $self = shift;
+
+    require Opsview::REST::Event;
+    my $uri = Opsview::REST::Event->new(@_);
+
+    return $self->get($uri->as_string);
+}
+
 # Downtime
 sub _downtime {
     my $self = shift;
@@ -180,6 +190,28 @@ More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:statu
 Downtime related methods.
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes>
+
+=head2 events( [ %args ] )
+
+Get events. An event is considered to be either:
+
+=over 4
+
+=item *
+
+a host or service changing state
+
+=item *
+
+a host or service result during soft failures
+
+=item *
+
+a host or service in a failure state where 'alert every failure' is enabled
+
+=back
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:event>
 
 =head2 reload
 
