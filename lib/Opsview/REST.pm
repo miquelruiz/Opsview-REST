@@ -101,6 +101,26 @@ sub reload_info {
     return $self->get('/reload');
 }
 
+# Acknowledge
+sub _ack {
+    my $self = shift;
+
+    require Opsview::REST::Acknowledge;
+    my $uri = Opsview::REST::Acknowledge->new(@_);
+
+    return $uri->as_string;
+}
+
+sub list_ack {
+    my $self = shift;
+    return $self->get($self->_ack(@_));
+}
+
+sub ack {
+    my $self = shift;
+    return $self->post($self->_ack(@_));
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
