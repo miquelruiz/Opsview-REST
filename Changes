@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.003     2012-01-19 09:18:39 Europe/Madrid
     - Added missing dependency: namespace::autoclean
 
 0.002     2012-01-12 20:22:49 Europe/Madrid
