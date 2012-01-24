@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Support for Acknowledges
 
 0.003     2012-01-19 09:18:39 Europe/Madrid
     - Added missing dependency: namespace::autoclean

@@ -5,11 +5,18 @@ use namespace::autoclean;
 
 has base => (
     is       => 'ro',
-    default  => '/acknowledge/',
+    default  => '/acknowledge',
     init_arg => undef,
 );
 
 with 'Opsview::REST::QueryBuilder';
+
+sub BUILDARGS {
+    my $class = shift;
+    return {
+        args => { @_ },
+    };
+}
 
 __PACKAGE__->meta->make_immutable;
 

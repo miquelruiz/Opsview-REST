@@ -111,12 +111,12 @@ sub _ack {
     return $uri->as_string;
 }
 
-sub list_ack {
+sub acknowledge_list {
     my $self = shift;
     return $self->get($self->_ack(@_));
 }
 
-sub ack {
+sub acknowledge {
     my $self = shift;
     return $self->post($self->_ack(@_));
 }
@@ -234,6 +234,16 @@ a host or service in a failure state where 'alert every failure' is enabled
 =back
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:event>
+
+=head2 acknowledge( [ %args ] )
+
+Acknowledge problems.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:acknowledge>
+
+=head2 acknowledge_list
+
+Lists the problems which the current logged in user has permission to acknowledge.
 
 =head2 reload
 

@@ -12,7 +12,22 @@ use Test::Exception;
 my @tests = (
     {
         args => [ ],
-        url  => '/acknowledge/',
+        url  => '/acknowledge',
+    },
+    {
+        args => [ host => 'hostA' ],
+        url  => '/acknowledge?host=hostA',
+    },
+    {
+        args => [ host => [qw/ hostA hostB /] ],
+        url  => '/acknowledge?host=hostA&host=hostB',
+    },
+    {
+        args => [
+            host    => [qw/ hostA hostB /],
+            keyword => [qw/ abcde efghi /],
+        ],
+        url  => '/acknowledge?keyword=abcde&keyword=efghi&host=hostA&host=hostB',
     },
 );
 
@@ -27,7 +42,7 @@ SKIP: {
         if (not defined $ENV{OPSVIEW_REST_TEST});
 
     my $ops = get_opsview();
-    lives_ok { $ops->list_ack } "Call to 'list_ack' didn't die";
+    lives_ok { $ops->acknowledge_list } "Call to 'acknowledge_list' didn't die";
 
 };
 
