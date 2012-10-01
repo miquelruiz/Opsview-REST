@@ -19,6 +19,23 @@ SYNOPSIS
             ...
         );
 
+        # Configuration methods
+        my $host1 = $ops->create_host(
+            ip                  => '192.168.0.1',
+            name                => 'monitoring-slave',
+            hostgroup           => { name => 'Monitoring Servers' },
+            notification_period => { name => '24x7' },
+        );
+
+        $ops->clone_host(
+            $host1->{object}->{id},
+            name => 'another-host',
+            ip   => '192.168.0.2',
+        );
+
+        # Reload it after config
+        $ops->reload;
+
 DESCRIPTION
     Opsview::REST is a set of modules to access the Opsview REST API, which
     is the recommended method for scripting configuration changes or any
@@ -101,6 +118,25 @@ METHODS
     More info:
     <http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiatin
     g_an_opsview_reload>
+
+  get_*
+  create_*
+  clone_*
+  update_*
+  delete_*
+    This methods will be generated for the following types of objects:
+    "contact", "role", "servicecheck", "hosttemplate", "attribute",
+    "timeperiod", "hostgroup", "servicegroup", "notificationmethod",
+    "hostcheckcommand", "keyword", "monitoringserver".
+
+    They all, except "create", require the object's id. Additionally,
+    "create", "clone" and "update" accept a list of key-value pairs.
+
+    More info:
+    <http://docs.opsview.com/doku.php?id=opsview3.14:restapi:config>
+
+TODO
+    Document and test configuration methods to handle sets of objects.
 
 SEE ALSO
     *   <http://www.opsview.org/>
