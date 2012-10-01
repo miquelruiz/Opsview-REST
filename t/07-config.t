@@ -43,7 +43,7 @@ my @tests = (
 test_urls('Opsview::REST::Config', @tests);
 
 SKIP: {
-    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 0
+    skip 'No $ENV{OPSVIEW_REST_TEST} defined', 7
         if (not defined $ENV{OPSVIEW_REST_TEST});
 
     my $ops  = get_opsview();
