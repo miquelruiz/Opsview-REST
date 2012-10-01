@@ -10,7 +10,7 @@ use overload
     '""' => sub {
         join ': ',
             join (' ', $_[0]->status, $_[0]->reason),
-            $_[0]->message, $_[0]->detail;
+            $_[0]->message || '', $_[0]->detail || '';
     },
     fallback => 1;
 
