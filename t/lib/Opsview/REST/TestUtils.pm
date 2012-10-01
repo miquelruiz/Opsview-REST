@@ -31,11 +31,11 @@ sub get_opsview_authtkt {
     my $ticket = $ENV{OPSVIEW_REST_AUTHTKT};
     unless (defined $ticket) {
         $ticket = Apache::AuthTkt->new(
-            secret      => $secret,
+            secret      => $ENV{OPSVIEW_REST_AUTHTKT_SECRET} || $secret,
             digest_type => 'MD5',
         )->ticket(
             uid     => $user,
-            ip_addr => '127.0.0.1',
+            ip_addr => $ENV{OPSVIEW_REST_AUTHTKT_IP} || '127.0.0.1',
         );
     }
 
