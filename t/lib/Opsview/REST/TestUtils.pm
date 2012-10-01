@@ -5,7 +5,9 @@ use warnings;
 
 require Exporter;
 our @ISA = qw/Exporter/;
-our @EXPORT = qw/get_opsview get_opsview_authtkt test_urls/;
+our @EXPORT = qw/
+    get_opsview get_opsview_authtkt test_urls get_random_name get_random_ip
+/;
 
 use Opsview::REST;
 
@@ -58,5 +60,14 @@ sub test_urls {
     };
 }
 
+sub get_random_name {
+    require String::Random;
+    my $sr = String::Random->new;
+    return $sr->randregex('\w{8}');
+}
+
+sub get_random_ip {
+    return join(".", map { int(rand(255)) } (1..4));
+}
 1;
 

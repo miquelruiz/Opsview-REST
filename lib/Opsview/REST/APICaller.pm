@@ -59,6 +59,18 @@ sub post {
     return $self->json->decode($r->{content});
 }
 
+sub put {
+    my ($self, $method, $data) = @_;
+
+    my $stuff = { headers => $self->headers };
+    $stuff->{content} = $self->json->encode($data) if defined $data;
+
+    my $r = $self->ua->put($self->base_url . $method, $stuff);
+    croak $self->_errmsg($r) unless $r->{success};
+
+    return $self->json->decode($r->{content});
+}
+
 sub _errmsg {
     my ($self, $r) = @_;
     my $cont; $cont = $self->json->decode($r->{content})

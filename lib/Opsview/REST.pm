@@ -4,6 +4,7 @@ use Moose;
 use namespace::autoclean;
 
 use Carp;
+use Opsview::REST::Config;
 use Opsview::REST::Exception;
 
 with 'Opsview::REST::APICaller';
@@ -18,6 +19,95 @@ has [qw/ pass auth_tkt /] => (
     is  => 'ro',
     isa => 'Str',
 );
+
+{
+    # install methods in the namespace for configurable objects
+    my @config_objects = qw/
+        contact host role servicecheck hosttemplate attribute timeperiod
+        hostgroup servicegroup notificationmethod hostcheckcommand keyword
+        monitoringserver
+    /;
+
+    for my $obj_type (@config_objects) {
+        no strict 'refs';
+
+        my $general_url = Opsview::REST::Config->new($obj_type);
+
+        # Single object get (get_contact, get_host, ...)
+        # URL: /rest/config/{object_type}/{id}
+        # GET - get object details
+        *{__PACKAGE__ . "::get_$obj_type"} = sub {
+            my $self = shift;
+            my $id   = shift;
+            croak "Required id" unless defined $id;
+
+            my $uri = Opsview::REST::Config->new($obj_type, $id);
+            return $self->get($uri->as_string);
+        };
+
+        
+        # Multiple object get (get_contacts, get_hosts, ...)
+        # URL: /rest/config/{object_type}
+        # GET - list object type. Can pass in search attributes
+        *{__PACKAGE__ . '::get_' . $obj_type . 's'} = sub {
+            return shift->get($general_url->as_string);
+        };
+
+        # Create object
+        # URL: /rest/config/{object_type}
+        # POST - add a new object or a list of object type
+        *{__PACKAGE__ . "::create_$obj_type"} = sub {
+            my $uri = Opsview::REST::Config->new($obj_type);
+            return shift->post($uri->as_string, { @_ });
+        };
+
+        # Clone object
+        # URL: /rest/config/{object_type}/{id}
+        # POST - clone this object with merged incoming data to create
+        # new object
+        *{__PACKAGE__ . "::clone_$obj_type"} = sub {
+            my $self = shift;
+            my $id   = shift;
+            croak "Required id" unless defined $id;
+
+            my $uri = Opsview::REST::Config->new($obj_type, $id);
+            return $self->post($uri->as_string, { @_ });
+        };
+
+        # Create or update
+        # URL: /rest/config/{object_type}
+        # PUT - create or update (based on unique keys) object or a list
+        # of objects
+        *{__PACKAGE__ . "::create_or_update_$obj_type"} = sub {
+            my $uri = Opsview::REST::Config->new($obj_type);
+            return shift->put($uri->as_string, { @_ });
+        };
+
+        # Update
+        # URL: /rest/config/{object_type}/{id}
+        # PUT - update this object's details
+        *{__PACKAGE__ . "::update_$obj_type"} = sub {
+            my $self = shift;
+            my $id   = shift;
+            croak "Required id" unless defined $id;
+
+            my $uri = Opsview::REST::Config->new($obj_type, $id);
+            return $self->put($uri->as_string, { @_ });
+        };
+
+        # Delete
+        # URL: /rest/config/{object_type}/{id}
+        # DELETE - delete object
+        *{__PACKAGE__ . "::delete_$obj_type"} = sub {
+            my $self = shift;
+            my $id   = shift;
+            croak "Required id" unless defined $id;
+
+            my $uri = Opsview::REST::Config->new($obj_type, $id);
+            return $self->delete($uri->as_string, { @_ });
+        };
+    }
+}
 
 sub BUILD {
     my ($self) = @_;
@@ -151,6 +241,23 @@ Opsview::REST - Interface to the Opsview REST API
         ...
     );
 
+    # Configuration methods
+    my $host1 = $ops->create_host(
+        ip                  => '192.168.0.1',
+        name                => 'monitoring-slave',
+        hostgroup           => { name => 'Monitoring Servers' },
+        notification_period => { name => '24x7' },
+    );
+
+    $ops->clone_host(
+        $host1->{object}->{id},
+        name => 'another-host',
+        ip   => '192.168.0.2',
+    );
+
+    # Reload it after config
+    $ops->reload;
+
 =head1 DESCRIPTION
 
 Opsview::REST is a set of modules to access the Opsview REST API, which is the
@@ -258,6 +365,30 @@ More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initi
 Get status of reload.
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiating_an_opsview_reload>
+
+=head2 get_*
+
+=head2 create_*
+
+=head2 clone_*
+
+=head2 update_*
+
+=head2 delete_*
+
+This methods will be generated for the following types of objects: C<contact>,
+C<role>, C<servicecheck>, C<hosttemplate>, C<attribute>, C<timeperiod>,
+C<hostgroup>, C<servicegroup>, C<notificationmethod>, C<hostcheckcommand>,
+C<keyword>, C<monitoringserver>.
+
+They all, except C<create>, require the object's id. Additionally, C<create>,
+C<clone> and C<update> accept a list of key-value pairs.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview3.14:restapi:config>
+
+=head1 TODO
+
+Document and test configuration methods to handle sets of objects.
 
 =head1 SEE ALSO
 
