@@ -45,12 +45,18 @@ has [qw/ pass auth_tkt /] => (
             return $self->get($uri->as_string);
         };
 
-        
         # Multiple object get (get_contacts, get_hosts, ...)
         # URL: /rest/config/{object_type}
         # GET - list object type. Can pass in search attributes
         *{__PACKAGE__ . '::get_' . $obj_type . 's'} = sub {
-            return shift->get($general_url->as_string);
+            my $self = shift;
+            require JSON::XS;
+            my $uri = Opsview::REST::Config->new(
+                $obj_type,
+                json_filter => JSON::XS::encode_json {@_},
+            );
+            return $self->get($uri->as_string);
+
         };
 
         # Create object
