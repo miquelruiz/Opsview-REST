@@ -1,6 +1,6 @@
 package Opsview::REST;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 use Carp;
@@ -11,13 +11,11 @@ with 'Opsview::REST::APICaller';
 
 has [qw/ user base_url /] => (
     is       => 'ro',
-    isa      => 'Str',
     required => 1,
 );
 
 has [qw/ pass auth_tkt /] => (
     is  => 'ro',
-    isa => 'Str',
 );
 
 {

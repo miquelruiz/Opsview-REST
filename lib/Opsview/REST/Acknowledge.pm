@@ -1,11 +1,11 @@
 package Opsview::REST::Acknowledge;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 has base => (
     is       => 'ro',
-    default  => '/acknowledge',
+    default  => sub { '/acknowledge' },
     init_arg => undef,
 );
 

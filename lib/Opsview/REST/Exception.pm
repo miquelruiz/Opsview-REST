@@ -1,6 +1,6 @@
 package Opsview::REST::Exception;
 
-use Moose;
+use Moo;
 
 # Can't use autoclean since it breaks overload:
 # https://github.com/rafl/namespace-autoclean/pull/1

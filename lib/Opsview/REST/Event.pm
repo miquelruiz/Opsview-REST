@@ -1,11 +1,11 @@
 package Opsview::REST::Event;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 has base => (
     is       => 'ro',
-    default  => '/event',
+    default  => sub { '/event' },
     init_arg => undef,
 );
 

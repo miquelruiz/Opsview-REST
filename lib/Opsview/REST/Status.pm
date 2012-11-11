@@ -1,11 +1,11 @@
 package Opsview::REST::Status;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 has base => (
     is       => 'ro',
-    default  => '/status/',
+    default  => sub { '/status/' },
     init_arg => undef,
 );
 

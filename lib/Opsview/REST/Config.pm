@@ -1,13 +1,13 @@
 package Opsview::REST::Config;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 use Carp;
 
 has base => (
     is       => 'ro',
-    default  => '/config/',
+    default  => sub { '/config/' },
     init_arg => undef,
 );
 

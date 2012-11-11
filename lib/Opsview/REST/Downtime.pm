@@ -1,11 +1,11 @@
 package Opsview::REST::Downtime;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
 
 has base => (
     is       => 'ro',
-    default  => '/downtime',
+    default  => sub { '/downtime' },
     init_arg => undef,
 );
 
