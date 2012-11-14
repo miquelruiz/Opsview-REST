@@ -1,4 +1,7 @@
 {{$NEXT}}
+
+0.006     2012-11-14 03:01:25 Europe/Madrid
+    - Using Moo instead of Moose
     - Support for single object configuration
     - AuthTkt testing improved
 
