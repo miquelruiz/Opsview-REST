@@ -17,7 +17,6 @@ use overload
 
 has [qw/status reason/] => (
     is       => 'ro',
-    isa      => 'Str',
     required => 1,
 );
 
