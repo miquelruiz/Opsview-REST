@@ -258,13 +258,11 @@ Opsview::REST - Interface to the Opsview REST API
         pass     => 'password',
     );
 
-    # These are equivalent
-    my $status = $ops->get('/status/hostgroup?hostgroupid=1&...');
+    # Check status
     my $status = $ops->status(
         'hostgroup',
         'hostgroupid' => [1, 2],
         'filter'      => 'unhandled',
-        ...
     );
 
     # Configuration methods
@@ -281,7 +279,25 @@ Opsview::REST - Interface to the Opsview REST API
         ip   => '192.168.0.2',
     );
 
-    # Reload it after config
+    # Search methods support complex SQL::Abstract queries
+    my $hosts = $ops->get_hosts(
+        -or => [
+            name => { -like => '%.example.com' },
+            ip   => { -like => '10.25.%' },
+        ],
+    );
+
+    # Update several objects at once
+    map { $_->{check_attempts} = 4 } @{ $hosts->{list} };
+    my $response = $ops->create_or_update_hosts($hosts->{list});
+
+    # ... or only one
+    my $response = $ops->create_or_update_host(
+        name         => 'host1.example.com',
+        snmp_version => '2c',
+    );
+
+    # Reload after make changes in config
     $ops->reload;
 
 =head1 DESCRIPTION
@@ -376,7 +392,8 @@ More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:ackno
 
 =head2 acknowledge_list
 
-Lists the problems which the current logged in user has permission to acknowledge.
+Lists the problems which the current logged in user has permission to
+acknowledge.
 
 =head2 reload
 
@@ -392,29 +409,78 @@ Get status of reload.
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiating_an_opsview_reload>
 
-=head2 get_*
+=head2 Config methods for single objects
 
-=head2 create_*
+=head3 get_*
 
-=head2 clone_*
+=head3 create_*
 
-=head2 update_*
+=head3 clone_*
 
-=head2 delete_*
+=head3 create_or_update_*
+
+=head3 delete_*
 
 This methods will be generated for the following types of objects: C<contact>,
 C<role>, C<servicecheck>, C<hosttemplate>, C<attribute>, C<timeperiod>,
 C<hostgroup>, C<servicegroup>, C<notificationmethod>, C<hostcheckcommand>,
 C<keyword>, C<monitoringserver>.
 
-They all, except C<create>, require the object's id. Additionally, C<create>,
-C<clone> and C<update> accept a list of key-value pairs.
+They all except C<create>, require the object's id. Additionally, C<create>,
+C<clone> and C<create_or_update> accept a list of key-value pairs:
 
-More info: L<http://docs.opsview.com/doku.php?id=opsview3.14:restapi:config>
+    my $host1 = $ops->create_host(
+        name => 'host1',
+        ip   => '192.168.10.27',
+    );
 
-=head1 TODO
+    $ops->clone_host(
+        $host1->{object}->{id},
+        name => 'host2',
+        ip   => '192.168.10.28',
+    );
 
-Document and test configuration methods to handle sets of objects.
+    $host->delete($id);
+
+=head2 Config methods for multiple objects
+
+=head3 get_*
+
+=head3 create_*
+
+=head3 create_or_update_*
+
+This methods will be generated for the following types of objects: C<contacts>,
+C<roles>, C<servicechecks>, C<hosttemplates>, C<attributes>, C<timeperiods>,
+C<hostgroups>, C<servicegroups>, C<notificationmethods>, C<hostcheckcommands>,
+C<keywords>, C<monitoringservers>.
+
+C<get> accepts complex queries in L<SQL::Abstract> format.
+
+C<create_or_update> is specially useful when you want to update several objects
+with a single call:
+
+    # First get a list of objects you want to modify
+    my $dbhosts = $ops->get_hosts(
+        name    => { -like => 'db%' },
+    );
+
+    # $dbhosts = {
+    #   summary => { ... },
+    #   list => [ { name => 'db1.example.com , ... }, ... ],
+    # };
+
+    # Modify them as you need
+    map { $_->{check_attempts} = 4 } @{ $dbhosts->{list} };
+
+    # Make the call
+    $ops->create_or_update($dbhosts->{list});
+
+
+To know which fields are accepted for each type of object, the format of the
+responses, and additional info:
+
+L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:config>
 
 =head1 SEE ALSO
 
@@ -423,6 +489,8 @@ Document and test configuration methods to handle sets of objects.
 =item *
 
 L<http://www.opsview.org/>
+
+L<http://docs.opsview.com/doku.php?id=opsview-community:restapi>
 
 =item *
 
