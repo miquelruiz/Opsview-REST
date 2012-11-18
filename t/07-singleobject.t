@@ -6,7 +6,7 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Opsview::REST::TestUtils;
 
-use Test::More tests => 14;
+use Test::More;
 use Test::Exception;
 
 use Data::Dumper;
@@ -83,4 +83,4 @@ SKIP: {
 
 }
 
-
+done_testing;
