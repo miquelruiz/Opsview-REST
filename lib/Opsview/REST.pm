@@ -102,7 +102,7 @@ has [qw/ pass auth_tkt /] => (
             } else {
                 $to_post = { @_ };
             }
-            return $self->put($uri->as_string, { @_ });
+            return $self->put($uri->as_string, $to_post);
         };
         # Alias to call last method in plural
         *{__PACKAGE__ . "::create_or_update_${obj_type}s"} =

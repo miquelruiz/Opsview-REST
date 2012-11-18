@@ -58,7 +58,7 @@ SKIP: {
             fullname => $name2,
         },
     ]);
-    ok($res->{objects_updated}, 'Create two contacts in a row');
+    ok($res->{objects_updated}, 'Create two contacts in one call');
 
     throws_ok {
         $ops->create_contacts([
