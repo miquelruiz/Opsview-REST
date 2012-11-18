@@ -51,7 +51,7 @@ has [qw/ pass auth_tkt /] => (
             require JSON::XS;
             my $uri = Opsview::REST::Config->new(
                 $obj_type,
-                json_filter => JSON::XS::encode_json {@_},
+                json_filter => JSON::XS::encode_json({@_}),
             );
             return $self->get($uri->as_string);
 
@@ -61,9 +61,20 @@ has [qw/ pass auth_tkt /] => (
         # URL: /rest/config/{object_type}
         # POST - add a new object or a list of object type
         *{__PACKAGE__ . "::create_$obj_type"} = sub {
-            my $uri = Opsview::REST::Config->new($obj_type);
-            return shift->post($uri->as_string, { @_ });
+            my $self = shift;
+            my $uri  = Opsview::REST::Config->new($obj_type);
+            my $to_post;
+            if (ref $_[0] && ref $_[0] eq 'ARRAY') {
+                $to_post = { list => shift };
+            } else {
+                $to_post = { @_ };
+            }
+            return $self->post($uri->as_string, $to_post);
         };
+
+        # Alias to call last method in plural
+        *{__PACKAGE__ . "::create_${obj_type}s"} =
+            *{__PACKAGE__ . "::create_$obj_type"};
 
         # Clone object
         # URL: /rest/config/{object_type}/{id}
@@ -83,9 +94,20 @@ has [qw/ pass auth_tkt /] => (
         # PUT - create or update (based on unique keys) object or a list
         # of objects
         *{__PACKAGE__ . "::create_or_update_$obj_type"} = sub {
-            my $uri = Opsview::REST::Config->new($obj_type);
-            return shift->put($uri->as_string, { @_ });
+            my $self = shift;
+            my $uri  = Opsview::REST::Config->new($obj_type);
+            my $to_post;
+            if (ref $_[0] && ref $_[0] eq 'ARRAY') {
+                $to_post = { list => shift };
+            } else {
+                $to_post = { @_ };
+            }
+            return $self->put($uri->as_string, { @_ });
         };
+        # Alias to call last method in plural
+        *{__PACKAGE__ . "::create_or_update_${obj_type}s"} =
+            *{__PACKAGE__ . "::create_or_update_$obj_type"};
+
 
         # Update
         # URL: /rest/config/{object_type}/{id}

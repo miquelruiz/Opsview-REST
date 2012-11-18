@@ -19,10 +19,6 @@ my @tests = (
         die  => 'No arguments die',
     },
     {
-        args => ['hostgroup'],
-        url  => '/config/hostgroup',
-    },
-    {
         args => ['hostgroup', 1],
         url  => '/config/hostgroup/1',
     },
