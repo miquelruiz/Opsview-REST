@@ -73,33 +73,23 @@ SKIP: {
         ]);
     } qr/Duplicate entry/, "Can't create them again";
 
-    my ($descr1, $descr2) = (get_random_name(), get_random_name());
+    my $descr1 = get_random_name();
+    my $cont = $ops->get_contacts(
+        name => [ $name1, $name2 ],
+    );
+    map { $_->{description} = $descr1 } @{ $cont->{list} };
 
     lives_ok {
-        $res = $ops->create_or_update_contacts([
-            {
-                name        => $name1,
-                fullname    => $name1,
-                description => $descr1,
-            },
-            {
-                name        => $name2,
-                fullname    => $name2,
-                description => $descr2,
-            },
-        ]);
+        $res = $ops->create_or_update_contacts($cont->{list});
     } "create_or_update didn't die";
 
-    $res = $ops->get_contacts(name => { '=', [ $name1, $name2 ]});
+    $res = $ops->get_contacts(name => [ $name1, $name2 ]);
     is($res->{summary}->{rows}, 2, 'Got back two contacts in search');
 
-    my $desc     = { $name1 => $descr1, $name2 => $descr2 };
-    my %contacts = map { $_->{name} => $_ } @{ $res->{list} };
-    for ($name1, $name2) {
-        my $c = $contacts{$_};
-        is($c->{description}, $desc->{$_}, "Contact $c->{id} correctly updated");
-        $res = $ops->delete_contact($c->{id});
-        ok($res->{success}, "Contact $c->{id} deleted");
+    for (@{ $res->{list} }) {
+        is($_->{description}, $descr1, "Contact $_->{id} correctly updated");
+        $res = $ops->delete_contact($_->{id});
+        ok($res->{success}, "Contact $_->{id} deleted");
     }
 }
 
