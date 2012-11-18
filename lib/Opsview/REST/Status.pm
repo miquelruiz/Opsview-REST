@@ -1,7 +1,6 @@
 package Opsview::REST::Status;
 
 use Moo;
-use namespace::autoclean;
 
 has base => (
     is       => 'ro',

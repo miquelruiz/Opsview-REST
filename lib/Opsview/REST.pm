@@ -1,8 +1,6 @@
 package Opsview::REST;
 
 use Moo;
-use namespace::autoclean;
-
 use Carp;
 use Opsview::REST::Config;
 use Opsview::REST::Exception;

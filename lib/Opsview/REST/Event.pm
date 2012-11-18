@@ -1,7 +1,6 @@
 package Opsview::REST::Event;
 
 use Moo;
-use namespace::autoclean;
 
 has base => (
     is       => 'ro',

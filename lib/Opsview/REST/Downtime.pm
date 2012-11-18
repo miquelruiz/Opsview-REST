@@ -1,7 +1,6 @@
 package Opsview::REST::Downtime;
 
 use Moo;
-use namespace::autoclean;
 
 has base => (
     is       => 'ro',

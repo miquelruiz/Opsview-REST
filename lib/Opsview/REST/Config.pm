@@ -1,8 +1,6 @@
 package Opsview::REST::Config;
 
 use Moo;
-use namespace::autoclean;
-
 use Carp;
 
 has base => (

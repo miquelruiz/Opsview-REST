@@ -2,10 +2,6 @@ package Opsview::REST::Exception;
 
 use Moo;
 
-# Can't use autoclean since it breaks overload:
-# https://github.com/rafl/namespace-autoclean/pull/1
-#use namespace::autoclean;
-
 use overload
     '""' => sub {
         join ': ',

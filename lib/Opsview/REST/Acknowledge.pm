@@ -1,7 +1,6 @@
 package Opsview::REST::Acknowledge;
 
 use Moo;
-use namespace::autoclean;
 
 has base => (
     is       => 'ro',
