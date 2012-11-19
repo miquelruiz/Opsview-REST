@@ -235,6 +235,16 @@ sub acknowledge {
     return $self->post($self->_ack(@_));
 }
 
+# Recheck
+sub recheck {
+    my $self = shift;
+
+    require Opsview::REST::Recheck;
+    my $uri = Opsview::REST::Recheck->new(@_);
+
+    return $self->post($uri->as_string);
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
