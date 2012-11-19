@@ -40,10 +40,14 @@ SKIP: {
         if (not defined $ENV{OPSVIEW_REST_TEST});
 
     my $ops = get_opsview();
-    my $res = $ops->recheck(host => 'opsview');
-#    use Data::Dumper;
-#    print Dumper($res);
+    my $res;
 
+    lives_ok {
+        $res = $ops->recheck(host => 'opsview');
+    } "Call to recheck didn't die";
+
+    ok(defined $res->{summary}, 'Got a summary in the response');
+    is($res->{summary}->{num_hosts}, 1, 'One host rechecked');
 };
 
 done_testing;
