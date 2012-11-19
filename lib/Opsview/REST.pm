@@ -417,6 +417,13 @@ Get status of reload.
 
 More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiating_an_opsview_reload>
 
+=head2 recheck( [ %args ] )
+
+Recheck services or hosts asynchronously. It returns info about the number of
+hosts and services that will be rechecked.
+
+More info: L<http://docs.opsview.com/doku.php?id=opsview-community:restapi:recheck>
+
 =head2 Config methods for single objects
 
 =head3 get_*

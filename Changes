@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Support for rechecks
 
 0.007     2012-11-18 20:41:23 Europe/Madrid
     - Not depending in namespace::autoclean
