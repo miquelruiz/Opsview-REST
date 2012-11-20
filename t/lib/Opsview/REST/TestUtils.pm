@@ -11,8 +11,6 @@ our @EXPORT = qw/
 
 use Opsview::REST;
 
-use Apache::AuthTkt;
-
 use Test::More;
 use Test::Exception;
 
@@ -32,6 +30,7 @@ sub get_opsview_authtkt {
 
     my $ticket = $ENV{OPSVIEW_REST_AUTHTKT};
     unless (defined $ticket) {
+        require Apache::AuthTkt;
         $ticket = Apache::AuthTkt->new(
             secret      => $ENV{OPSVIEW_REST_AUTHTKT_SECRET} || $secret,
             digest_type => 'MD5',
