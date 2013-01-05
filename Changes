@@ -1,4 +1,5 @@
 {{$NEXT}}
+    - Tests fixed for perl 5.17
 
 0.008     2012-11-20 04:15:25 Europe/Madrid
     - Support for rechecks

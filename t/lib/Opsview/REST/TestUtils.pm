@@ -13,6 +13,7 @@ use Opsview::REST;
 
 use Test::More;
 use Test::Exception;
+use Test::Deep;
 
 sub get_opsview {
     my ($url, $user, $pass) = (qw( http://localhost/rest admin initial ));
@@ -52,9 +53,23 @@ sub test_urls {
     for (@tests) {
         if ($_->{die}) {
             dies_ok { $class->new(@{ $_->{args} }); } $_->{die};
+        } elsif ($_->{url}) {
+            use Data::Dump;
+            my @args = @{ $_->{args} };
+            my $obj = $class->new(@args);
+
+            shift @args if (scalar @args & 1);
+            my @r = %{ $obj->uri->query_form_hash };
+            cmp_bag(\@r, \@args, $_->{url});
+        } elsif ($_->{path}) {
+            my @args = @{ $_->{args} };
+            my $obj = $class->new(@args);
+
+            my @r = $obj->uri->path_segments;
+            @r = splice @r, 2;
+            cmp_bag(\@r, \@args, $_->{url});
         } else {
-            my $status = $class->new(@{ $_->{args} });
-            is($status->as_string, $_->{url}, $_->{url});
+            die "Don't know how to test this";
         }
     };
 }

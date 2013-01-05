@@ -20,11 +20,11 @@ my @tests = (
     },
     {
         args => ['hostgroup', 1],
-        url  => '/config/hostgroup/1',
+        path  => '/config/hostgroup/1',
     },
     {
         args => ['contact', 5],
-        url  => '/config/contact/5',
+        path  => '/config/contact/5',
     },
     {
         args => ['contact', 'xx'],

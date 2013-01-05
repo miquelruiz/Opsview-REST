@@ -2,6 +2,7 @@ package Opsview::REST::QueryBuilder;
 
 use Moo::Role;
 use URI;
+use URI::QueryParam;
 
 requires 'base';
 
