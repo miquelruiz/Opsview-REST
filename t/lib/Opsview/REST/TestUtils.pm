@@ -54,7 +54,6 @@ sub test_urls {
         if ($_->{die}) {
             dies_ok { $class->new(@{ $_->{args} }); } $_->{die};
         } elsif ($_->{url}) {
-            use Data::Dump;
             my @args = @{ $_->{args} };
             my $obj = $class->new(@args);
 
