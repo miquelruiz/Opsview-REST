@@ -4,7 +4,7 @@ use Moo::Role;
 
 use Carp;
 
-use JSON::XS ();
+use JSON ();
 use HTTP::Tiny;
 
 has ua => (
@@ -24,7 +24,7 @@ has headers => (
 
 has json => (
     is      => 'ro',
-    default => sub { JSON::XS->new },
+    default => sub { JSON->new },
 );
 
 sub get {
