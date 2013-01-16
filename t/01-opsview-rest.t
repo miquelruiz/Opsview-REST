@@ -6,6 +6,8 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 use Opsview::REST::TestUtils;
 
+use HTTP::Tiny;
+
 use Test::More tests => 14;
 use Test::Exception;
 
@@ -34,7 +36,11 @@ SKIP: {
     is($@->reason, 'Unauthorized', '"Unauthorized" reason in exception');
     ok(defined $@->message, 'Message defined in exception');
 
-    my $ops = get_opsview();
+    my $ops = get_opsview(undef, undef, undef, ua => HTTP::Tiny->new);
+    like($ops->ua->agent, qr/HTTP-Tiny/, 'Force user agent');
+
+    $ops = get_opsview();
+    like($ops->ua->agent, qr/Opsview-REST/, 'Default user agent');
 
     isa_ok($ops, 'Opsview::REST', "Object created");
     ok(defined $ops->headers->{'X-Opsview-Token'}, "Logged in");

@@ -16,11 +16,14 @@ use Test::Exception;
 use Test::Deep;
 
 sub get_opsview {
-    my ($url, $user, $pass) = (qw( http://localhost/rest admin initial ));
+    my ($url, $user, $pass, %opts) = 
+        (qw( http://localhost/rest admin initial ));
+
     return Opsview::REST->new(
         base_url => $ENV{OPSVIEW_REST_URL}  || $url,
         user     => $ENV{OPSVIEW_REST_USER} || $user,
         pass     => $ENV{OPSVIEW_REST_PASS} || $pass,
+        %opts
     );
 }
 
