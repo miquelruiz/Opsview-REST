@@ -4,8 +4,9 @@ use Moo::Role;
 
 use Carp;
 
+use Try::Tiny;
 use JSON::XS ();
-use HTTP::Tiny;
+use HTTP::Tiny 0.014;
 
 has ua => (
     is      => 'ro',
@@ -73,15 +74,23 @@ sub put {
 
 sub _errmsg {
     my ($self, $r) = @_;
-    my $cont; $cont = $self->json->decode($r->{content})
-        if $r->{content};
+    my $exc = {
+        status => $r->{status},
+        reason => $r->{reason},
+    };
 
-    return Opsview::REST::Exception->new(
-        status  => $r->{status},
-        reason  => $r->{reason},
-        message => $cont ? $cont->{message} : undef,
-        detail  => $cont ? $cont->{detail}  : undef,
-    );
+    if ($r->{content}) {
+        try {
+            my $resp;
+            $resp = $self->json->decode($r->{content});
+            $exc->{message} = $resp->{message} || undef;
+            $exc->{detail}  = $resp->{detail}  || undef;
+        } catch {
+            $exc->{message} = $r->{content};
+        };
+    }
+
+    return Opsview::REST::Exception->new($exc);
 }
 
 1;
