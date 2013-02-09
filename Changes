@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+0.011     2013-02-09 19:17:44 Europe/Madrid
+    - The constructor accepts the parameter 'ua', which must be an HTTP::Tiny
+      object.
+    - Better exception stringification
+
 0.010     2013-01-07 15:01:03 Europe/Madrid
     - Tests fixed for perl 5.17
 

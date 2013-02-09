@@ -74,6 +74,9 @@ METHODS
         Either the pass or the auth_tkt MUST be passed. It will die horribly
         if none of these are found.
 
+    ua  A user agent object can be provided here. It should be an HTTP::Tiny
+        subclass.
+
   get($url)
     Makes a "GET" request to the API. The response is properly deserialized
     and returned as a Perl data structure.
