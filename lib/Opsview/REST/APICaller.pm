@@ -52,7 +52,11 @@ sub post {
     my ($self, $method, $data) = @_;
 
     my $stuff = { headers => $self->headers };
-    $stuff->{content} = $self->json->encode($data) if defined $data;
+    if (defined $data) {
+        $stuff->{content} = $self->json->encode($data);
+    } else {
+        $stuff->{headers}->{'Content-Length'} = '0';
+    }
 
     my $r = $self->ua->post($self->base_url . $method, $stuff);
     croak $self->_errmsg($r) unless $r->{success};
