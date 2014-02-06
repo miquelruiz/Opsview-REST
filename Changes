@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+0.012     2014-02-06 12:39:13 Europe/Madrid
+    - Content-Length header set to 0 in empty POSTs.
+    - Links updated to point to opsview-core instead of opsview-community,
+      wich has been deprecated
+
 0.011     2013-02-09 19:17:44 Europe/Madrid
     - The constructor accepts the parameter 'ua', which must be an HTTP::Tiny
       object.

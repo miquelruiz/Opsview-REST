@@ -87,7 +87,7 @@ METHODS
     properly translated to URL arguments.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:status>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:status>
 
   downtimes
   create_downtime( %args )
@@ -95,8 +95,7 @@ METHODS
     Downtime related methods.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:downtimes
-    >
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:downtimes>
 
   events( [ %args ] )
     Get events. An event is considered to be either:
@@ -109,14 +108,13 @@ METHODS
         enabled
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:event>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:event>
 
   acknowledge( [ %args ] )
     Acknowledge problems.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:acknowled
-    ge>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:acknowledge>
 
   acknowledge_list
     Lists the problems which the current logged in user has permission to
@@ -128,22 +126,22 @@ METHODS
     contains the info of the reload.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiatin
-    g_an_opsview_reload>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi#initiating_an_
+    opsview_reload>
 
   reload_info
     Get status of reload.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi#initiatin
-    g_an_opsview_reload>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi#initiating_an_
+    opsview_reload>
 
   recheck( [ %args ] )
     Recheck services or hosts asynchronously. It returns info about the
     number of hosts and services that will be rechecked.
 
     More info:
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:recheck>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:recheck>
 
   Config methods for single objects
    get_*
@@ -206,13 +204,13 @@ METHODS
     To know which fields are accepted for each type of object, the format of
     the responses, and additional info:
 
-    <http://docs.opsview.com/doku.php?id=opsview-community:restapi:config>
+    <http://docs.opsview.com/doku.php?id=opsview-core:restapi:config>
 
 SEE ALSO
     *   <http://www.opsview.org/>
 
     *   Opsview REST API Documentation
-        <http://docs.opsview.com/doku.php?id=opsview-community:restapi>
+        <http://docs.opsview.com/doku.php?id=opsview-core:restapi>
 
 AUTHOR
     *   Miquel Ruiz <mruiz@cpan.org>
