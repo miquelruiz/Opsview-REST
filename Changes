@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+0.013     2014-03-25 22:06:27+01:00 Europe/Madrid
+    - Depend on JSON instead of JSON::XS
+
 0.012     2014-02-06 12:39:13 Europe/Madrid
     - Content-Length header set to 0 in empty POSTs.
     - Links updated to point to opsview-core instead of opsview-community,
