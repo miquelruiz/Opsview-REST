@@ -253,8 +253,10 @@ __END__
 =pod
 
 =head1 NAME
-    
+
 Opsview::REST - Interface to the Opsview REST API
+
+=for html <a href="https://travis-ci.org/miquelruiz/Opsview-REST"><img src="https://travis-ci.org/miquelruiz/Opsview-REST.svg?branch=master"></a>
 
 =head1 SYNOPSIS
 
@@ -528,7 +530,7 @@ Miquel Ruiz <mruiz@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Miquel Ruiz.
+This software is copyright (c) 2017 by Miquel Ruiz.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
